@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.owl.user.repository.UserRepository">
+    <!-- CodeBuilder  Generated-->
+    <resultMap id="UserMap" type="com.owl.user.entity.User">
+        <result column="id" property="id" jdbcType="BIGINT"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="age" property="age" jdbcType="INTEGER"/>
+        <result column="gender" property="gender" jdbcType="INTEGER"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+    <sql id="Table_Name">tb_user</sql>
+    <sql id="Base_Column_List">
+        id ,
+        name ,
+        age ,
+        gender ,
+        create_time
+    </sql>
+    <select id="selectByPage" resultMap="UserMap" parameterType="com.owl.user.api.request.ListUserRequest">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM
+        <include refid="Table_Name"/>
+        t
+        <if test="userRequest != null">
+            <where>
+                1=1
+                <if test="userRequest.name!=null">
+                    <bind name="nameLike" value="'%'+userRequest.name+'%'"/>
+                    AND name LIKE #{nameLike}
+                </if>
+                <if test="userRequest.gender!=null">
+                    AND gender = #{userRequest.gender}
+                </if>
+            </where>
+        </if>
+    </select>
+</mapper>
